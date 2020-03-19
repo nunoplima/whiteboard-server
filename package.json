@@ -1,0 +1,22 @@
+{
+  "name": "whiteboard",
+  "version": "1.0.0",
+  "scripts": {
+    "db:drop": "node db/drop.js",
+    "db:create": "node db/create.js",
+    "db:seed": "node db/seed.js",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "node-fetch": "^2.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.2"
+  }
+}
