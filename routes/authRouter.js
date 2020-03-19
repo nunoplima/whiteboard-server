@@ -1,7 +1,7 @@
 const authRouter = require("express").Router();
-const { checkFacebookToken, findUserByFacebookId, sendToken } = require("../controllers/auth-controller");
+const { checkFacebookToken, findUserByFacebookId, createUser, findUserById, sendUserAndToken } = require("../controllers/auth-controller");
 
-authRouter.post("/", checkFacebookToken, findUserByFacebookId, sendToken);
+authRouter.post("/", checkFacebookToken, findUserByFacebookId, createUser, findUserById, sendUserAndToken);
 
 module.exports = authRouter;
 

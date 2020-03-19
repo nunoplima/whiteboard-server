@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const { genToken } = require("../services/jwt");
+const User = require("../models/User");
 require("dotenv").config();
 
 const { FB_APP_ID, FB_APP_SECRET } = process.env;
@@ -23,14 +24,37 @@ const checkFacebookToken = async (req, res, next) => {
     }
 };
 
+const findUserById = (req, res, next) => {
+    const id = req.insertId;
+    if (!id) return next();
+    User.findById(id, (err, results) => {
+        if (err) return next(err);
+        req.user = results[0];
+        next();
+    });
+};
+
 const findUserByFacebookId = (req, res, next) => {
-
+    User.findByFacebookId(req.body.facebook_id, (err, results) => {
+        if (err) return next(err);
+        req.user = results[0];
+        next();
+    });
 };
 
-const sendToken = (req, res, next) => {
-    console.log(req.body);
+const createUser =  (req, res, next) => {
+    if (req.user) return next();
+    User.create(req.body, (err, results) => {
+        if (err) return next(err);
+        req.insertId = results.insertId;
+        next();
+    });
+};
+
+const sendUserAndToken = (req, res, next) => {
+    const user = req.user;
     const token = genToken(req.body.id);
-    res.status(200).json({ token });
+    res.status(200).json({ user, token });
 };
 
-module.exports = { checkFacebookToken, sendToken, findUserByFacebookId };
+module.exports = { checkFacebookToken, findUserById, findUserByFacebookId, createUser, sendUserAndToken };

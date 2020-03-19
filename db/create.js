@@ -5,6 +5,7 @@ const createUsers = new Promise((resolve, reject) => {
         `CREATE TABLE user (
         id INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL,
         facebook_id DECIMAL(21, 0) UNIQUE,
+        username VARCHAR(255) NOT NULL,
         is_coach TINYINT(1) DEFAULT 0,
         is_owner TINYINT(1) DEFAULT 0,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
