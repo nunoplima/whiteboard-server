@@ -46,7 +46,7 @@ const createResults = new Promise((resolve, reject) => {
         PRIMARY KEY(user_id,wod_id),
         user_id INT(11) NOT NULL,
         wod_id BIGINT(20) NOT NULL,
-        result INT NOT NULL,
+        result DECIMAL(5,2) NOT NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NOT NULL DEFAULT NOW() ON UPDATE now(),
         FOREIGN KEY (user_id) 
@@ -65,10 +65,10 @@ const createResults = new Promise((resolve, reject) => {
 });
 
 const createTables = async () => {
-    const createUsersLog = await createUsers;
-    console.log(createUsersLog);
     const createWodsLog = await createWods;
     console.log(createWodsLog);
+    const createUsersLog = await createUsers;
+    console.log(createUsersLog);
     const createResultsLog = await createResults;
     console.log(createResultsLog);
     connection.end();

@@ -24,16 +24,6 @@ const checkFacebookToken = async (req, res, next) => {
     }
 };
 
-const findUserById = (req, res, next) => {
-    const id = req.insertId;
-    if (!id) return next();
-    User.findById(id, (err, results) => {
-        if (err) return next(err);
-        req.user = results[0];
-        next();
-    });
-};
-
 const findUserByFacebookId = (req, res, next) => {
     User.findByFacebookId(req.body.facebook_id, (err, results) => {
         if (err) return next(err);
@@ -51,9 +41,19 @@ const createUser =  (req, res, next) => {
     });
 };
 
+const findUserById = (req, res, next) => {
+    const id = req.insertId || (req.userData && req.userData.id);
+    if (!id) return next();
+    User.findById(id, (err, results) => {
+        if (err) return next(err);
+        req.user = results[0];
+        next();
+    });
+};
+
 const sendUserAndToken = (req, res, next) => {
     const user = req.user;
-    const token = genToken(req.body.id);
+    const token = genToken(user.id);
     res.status(200).json({ user, token });
 };
 

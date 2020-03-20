@@ -4,6 +4,8 @@ const logger = require("morgan");
 const cors = require("cors");
 const errorHandler = require("errorhandler");
 const authRouter = require("./routes/authRouter");
+const wodRouter = require("./routes/wodRouter");
+
 
 // middleware
 app.use(logger("dev"));
@@ -11,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth/facebook", authRouter);
+app.use("/wods", wodRouter);
 
 const PORT = process.env.PORT || 4000;
 
