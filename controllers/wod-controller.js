@@ -1,4 +1,3 @@
-const fetch = require("node-fetch");
 const Wod = require("../models/Wod");
 const Result = require("../models/Result");
 require("dotenv").config();

@@ -5,6 +5,7 @@ const cors = require("cors");
 const errorHandler = require("errorhandler");
 const authRouter = require("./routes/authRouter");
 const wodRouter = require("./routes/wodRouter");
+const resultRouter = require("./routes/resultRouter");
 
 
 // middleware
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth/facebook", authRouter);
+app.use("/wods/:wodId/result", resultRouter);
 app.use("/wods", wodRouter);
 
 const PORT = process.env.PORT || 4000;

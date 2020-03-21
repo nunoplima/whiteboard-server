@@ -12,4 +12,26 @@ Result.findAll = (cb) => {
     });
 };
 
+Result.find = (wodId, userId, cb) => {
+    const sql = `SELECT * FROM result WHERE wod_id = ? AND user_id = ?`;
+    connection.query(sql, [wodId, userId], (err, results, fields) => {
+        cb(err, results);
+    });
+};
+
+Result.create = (resultData, cb) => {
+    const sql = `INSERT INTO result SET ?`
+    connection.query(sql, [resultData], (err, results, fields) => {
+        cb(err, results);
+    });
+};
+
+Result.update = (result, wodId, userId, cb) => {
+    const sql = `UPDATE result SET result = ? WHERE wod_id = ? AND user_id = ?`;
+    connection.query(sql, [result, wodId, userId], (err, results, fields) => {
+        cb(err, results);
+    });
+}
+
+
 module.exports = Result;
