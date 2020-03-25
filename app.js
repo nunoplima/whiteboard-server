@@ -19,9 +19,9 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth/facebook", authRouter);
-app.use("/wods/:wodId/result", resultRouter);
+// app.use("/wods/:wodId/result", resultRouter);
 app.use("/wods", wodRouter);
-
+app.use("/leaderboard", resultRouter);
 
 app.use(errorHandler());
 
