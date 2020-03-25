@@ -13,7 +13,7 @@ const createResult = (resultData) => (
 
 const findResult = (wodId, userId) => (
     new Promise((resolve, reject) => {
-        Result.find(wodId, userId, (err, results) => {
+        Result.find(wodId, (err, results) => {
             if (err) reject(err);
             else resolve(results);
         })
@@ -37,8 +37,8 @@ io.on("connection", socket => {
         console.log("adding result");
         const { wod_id: wodId, user_id: userId } = resultData;
         createResult(resultData)
-            .then(() => findResult(wodId, userId))
-            .then((results) => socket.emit("add to results", { wodId, result: results[0] }))
+            .then(() => findResult(wodId))
+            .then((results) => socket.emit("add to results", { wodId, results }))
             .catch((e) => console.log(e));
     });
 
@@ -46,8 +46,8 @@ io.on("connection", socket => {
     socket.on("edit result", ({ result, wod_id: wodId, user_id: userId }) => {
         console.log("editing result");
         updateResult(result, wodId, userId)
-            .then(() => findResult(wodId, userId))
-            .then((results) => socket.emit("edit results", { wodId, userId, result: results[0] }))
+            .then(() => findResult(wodId))
+            .then((results) => socket.emit("edit results", { wodId, results }))
             .catch((e) => console.log(e));
     });
 
