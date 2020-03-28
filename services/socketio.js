@@ -38,7 +38,7 @@ io.on("connection", socket => {
         const { wod_id: wodId, user_id: userId } = resultData;
         createResult(resultData)
             .then(() => findResult(wodId))
-            .then((results) => socket.emit("add to results", { wodId, results }))
+            .then((results) => io.emit("add to results", { wodId, results }))
             .catch((e) => console.log(e));
     });
 
@@ -47,7 +47,7 @@ io.on("connection", socket => {
         console.log("editing result");
         updateResult(result, wodId, userId)
             .then(() => findResult(wodId))
-            .then((results) => socket.emit("edit results", { wodId, results }))
+            .then((results) => io.emit("edit results", { wodId, results }))
             .catch((e) => console.log(e));
     });
 
