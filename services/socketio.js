@@ -1,5 +1,6 @@
 const io = require("socket.io")();
 const Result = require("../models/Result");
+const { reArrange } = require("../util/reArrangeResults");
 
 
 const createResult = (resultData) => ( 
@@ -11,7 +12,7 @@ const createResult = (resultData) => (
     })
 );
 
-const findResult = (wodId, userId) => (
+const findResults = (wodId, userId) => (
     new Promise((resolve, reject) => {
         Result.find(wodId, (err, results) => {
             if (err) reject(err);
@@ -29,6 +30,15 @@ const updateResult = (result, wodId, userId) => (
     })
 );
 
+const findLeaderboard = results => (
+    new Promise((resolve, reject) => {
+        Result.findAll((err, leaderboard) => {
+            if (err) reject(err);
+            else resolve({ results, leaderboard: reArrange(leaderboard) });
+        });
+    })
+);
+
 io.on("connection", socket => {
     console.log("a user signed in");
 
@@ -37,8 +47,9 @@ io.on("connection", socket => {
         console.log("adding result");
         const { wod_id: wodId, user_id: userId } = resultData;
         createResult(resultData)
-            .then(() => findResult(wodId))
-            .then((results) => io.emit("add to results", { wodId, results }))
+            .then(() => findResults(wodId))
+            .then((results) => findLeaderboard(results))
+            .then(({ results, leaderboard }) => io.emit("add to results", { wodId, results, leaderboard }))
             .catch((e) => console.log(e));
     });
 
@@ -46,8 +57,9 @@ io.on("connection", socket => {
     socket.on("edit result", ({ result, wod_id: wodId, user_id: userId }) => {
         console.log("editing result");
         updateResult(result, wodId, userId)
-            .then(() => findResult(wodId))
-            .then((results) => io.emit("edit results", { wodId, results }))
+            .then(() => findResults(wodId))
+            .then((results) => findLeaderboard(results))
+            .then(({ results, leaderboard }) => io.emit("edit results", { wodId, results, leaderboard }))
             .catch((e) => console.log(e));
     });
 
