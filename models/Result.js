@@ -12,13 +12,13 @@ Result.findAll = (cb) => {
                 a.result, 
                 a.created_at, 
                 a.updated_at, 
-                COUNT(b.result) + 1 as rank
-            FROM result a 
+                IF (a.result > 0, COUNT(b.result) + 1, "-") AS rank
+            FROM result AS a 
             JOIN wod
                 ON wod.id = a.wod_id
             JOIN user
                 ON user.id = a.user_id    
-            LEFT JOIN result b 
+            LEFT JOIN result AS b 
                 ON IF(wod.score_type = 'time', a.result > b.result and a.wod_id = b.wod_id, a.result < b.result and a.wod_id = b.wod_id)   
             GROUP BY a.user_id, a.wod_id, a.result, a.created_at, a.updated_at
             ORDER BY rank, a.updated_at
@@ -38,13 +38,13 @@ Result.find = (wodId, cb) => {
                 a.result, 
                 a.created_at, 
                 a.updated_at, 
-                COUNT(b.result) + 1 as rank
-            FROM result a 
+                IF (a.result > 0, COUNT(b.result) + 1, "-") AS rank
+            FROM result AS a 
             JOIN wod
                 ON wod.id = a.wod_id
             JOIN user
                 ON user.id = a.user_id    
-            LEFT JOIN result b 
+            LEFT JOIN result AS b 
                 ON IF(wod.score_type = 'time', a.result > b.result and a.wod_id = b.wod_id, a.result < b.result and a.wod_id = b.wod_id)   
             WHERE a.wod_id = ?
             GROUP BY a.user_id, a.wod_id, a.result, a.created_at, a.updated_at
