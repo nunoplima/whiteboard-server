@@ -7,6 +7,7 @@ Result.findAll = (cb) => {
         `
             SELECT
                 user.username,
+                user.gender,
                 a.user_id, 
                 a.wod_id, 
                 a.result, 
@@ -33,6 +34,7 @@ Result.find = (wodId, cb) => {
         `
             SELECT
                 user.username,
+                user.gender,
                 a.user_id, 
                 a.wod_id, 
                 a.result, 

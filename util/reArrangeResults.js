@@ -11,22 +11,26 @@ const reArrange = arr => {
     const newArr = Object.entries(arr.reduce(
         (acc, cur) => ({
             ...acc,
-            [cur.username]: {
-                ...acc[cur.username],
+            [cur.user_id]: {
+                ...acc[cur.user_id],
 
-                [cur.rank]: (acc[cur.username] || [])[cur.rank]
-                    ? acc[cur.username][cur.rank] + 1
+                [cur.rank]: (acc[cur.user_id] || [])[cur.rank]
+                    ? acc[cur.user_id][cur.rank] + 1
                     : 1,
 
-                points: (acc[cur.username] || []).points
-                    ? acc[cur.username].points + (pointsObj[cur.rank] || 0)
+                points: (acc[cur.user_id] || []).points
+                    ? acc[cur.user_id].points + (pointsObj[cur.rank] || 0)
                     : pointsObj[cur.rank] || 0,
 
-                completed: (acc[cur.username] || []).completed
-                    ? acc[cur.username].completed + 1
+                completed: (acc[cur.user_id] || []).completed
+                    ? acc[cur.user_id].completed + 1
                     : 1,
                 
-                user_id: cur.user_id,
+                username: cur.username,
+                    
+                id: cur.user_id,
+
+                gender: cur.gender,
             }
         }),
         {}
@@ -41,7 +45,7 @@ const reArrange = arr => {
             rank -= 1;
             prevIdx -= 1;
         }
-        return [ res[0], { ...res[1], rank }];
+        return { ...res[1], rank };
     });
 
     return newSortedArrWithRanking;
