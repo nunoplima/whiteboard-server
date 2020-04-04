@@ -23,6 +23,9 @@ app.use("/auth/facebook", authRouter);
 app.use("/wods", wodRouter);
 app.use("/leaderboard", resultRouter);
 
+// route to awake heroku API with cron-job at https://cron-job.org/en
+app.get("/", (req, res) => res.sendStatus(200));
+
 app.use(errorHandler());
 
 const server = http.Server(app);
