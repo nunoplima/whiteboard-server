@@ -1,5 +1,6 @@
 const fetch = require("node-fetch");
 const { genToken } = require("../services/jwt");
+const { getGender } = require("../util/getGenderHelper");
 const User = require("../models/User");
 require("dotenv").config();
 
@@ -32,6 +33,14 @@ const findUserByFacebookId = (req, res, next) => {
     });
 };
 
+const setGender = async (req, res, next) => {
+    if (req.user) return next();
+    const { username } = req.body;
+    const gender = await getGender(username.split(" ").length > 1 ? username.split(" ")[0] : username);
+    req.body.gender = gender === "male" || gender === "female" ? gender.charAt(0).toLowerCase() : "non-binary";
+    next();
+};
+
 const createUser =  (req, res, next) => {
     if (req.user) return next();
     User.create(req.body, (err, results) => {
@@ -57,4 +66,4 @@ const sendUserAndToken = (req, res, next) => {
     res.status(200).json({ user, token });
 };
 
-module.exports = { checkFacebookToken, findUserById, findUserByFacebookId, createUser, sendUserAndToken };
+module.exports = { checkFacebookToken, findUserById, findUserByFacebookId, setGender, createUser, sendUserAndToken };
